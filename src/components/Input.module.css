@@ -1,0 +1,18 @@
+.input-root {
+    display: grid;
+    gap: 0.875rem;
+
+    text-align: left;
+}
+
+.input-root input {
+    width: 100%;
+    background: var(--gray-900);
+    border: 0;
+    resize: none;
+    height: 3rem;
+    padding: 1rem;
+    border-radius: 8px;
+    color: var(--gray-100);
+    line-height: 1.4;
+}

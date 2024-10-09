@@ -1,0 +1,22 @@
+.register {
+    background: var(--gray-800);
+    border-radius: 8px;
+    padding: 2.5rem;
+    overflow: hidden;
+
+    text-align: center;
+}
+
+.fields {
+    display: grid;
+    gap: 2rem;
+    width: 70%;    
+    margin: 2.5rem auto;
+
+    grid-template-columns: auto auto;
+}
+
+.fields > div:nth-child(1), .fields > div:nth-child(2) {
+    grid-column: span 2;
+}
+

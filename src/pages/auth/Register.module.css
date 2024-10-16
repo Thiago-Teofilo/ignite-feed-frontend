@@ -7,16 +7,75 @@
     text-align: center;
 }
 
+.register .buttons {
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    margin: auto;    
+}
+
+.register button {
+    margin-bottom: 2rem;
+}
+
 .fields {
     display: grid;
     gap: 2rem;
-    width: 70%;    
+    width: 30rem;    
     margin: 2.5rem auto;
-
-    grid-template-columns: auto auto;
 }
 
-.fields > div:nth-child(1), .fields > div:nth-child(2) {
-    grid-column: span 2;
+.steps {
+    display: grid;
+    margin: auto;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    width: max-content;
+    margin-top: 2rem;
 }
 
+.steps > div {
+    width: 10rem;
+    position: relative;
+}
+
+.steps > div::before {
+    content: "";
+    position: absolute;
+    width: 50%;
+    right: 0;
+    z-index: 0;
+    top: calc(50% - 1rem - 1px);
+    background-color: var(--gray-400);
+    height: 2px;
+}
+
+.steps > div + div::before {
+    left: 0;
+}
+
+.steps > div > div {
+    background-color: var(--gray-900);
+    font-weight: bold;
+    width: max-content;
+    margin: auto;
+    position: relative;
+    z-index: 100;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    padding: 0.65rem 1rem;
+}
+
+.steps > div.active > div {
+    background-color: var(--green-500);
+}
+
+@media (max-width: 550px) {
+    .fields {
+        width: 100%
+    }
+
+    .steps > div {
+        width: 5rem;
+    }
+}

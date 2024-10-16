@@ -4,53 +4,73 @@ import { Sidebar } from "../components/Sidebar"
 import styles from './Home.module.css'
 
 import { IPost } from "../api/models/Post"
-
-export const author = {
-  avatarUrl: 'https://media.licdn.com/dms/image/v2/D4D03AQHloTv6jOq3gA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1722442298115?e=1731542400&v=beta&t=y8qngHvMTI2LmQgVG8-eeYqJXhJiMxpAOb_d3qyTPHM',
-  name: 'Thiago Teofilo',
-  role: 'Web Developer'
-}
-
-const posts: IPost[] = [
-  {
-    id: 1,
-    author,
-    content: `
-      Fala galeraa 👋
-      
-      Acabei de subir mais um projeto no meu portifa.
-      
-      É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀
-      
-      https://jane.design/doctorcare
-      #novoprojeto #nlw #rocketseat
-    `,
-    publishedAt: new Date('2024-05-03 20:00:00')
-  },
-  {
-    id: 2,
-    author: {
-      avatarUrl: 'https://media.licdn.com/dms/image/v2/D4D03AQGEHMLnYkdbqQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1712266222774?e=1732147200&v=beta&t=RGYWex4lRhkndhxZelql6F63HFITL2i64gVtEzyn0nA',
-      name: 'Renato Junior',
-      role: 'Desenvolvedor Backend Sênior'
-    },
-    content: `
-      Bom dia,
-      
-      meu nome é Renato. Estou muito animado para aprender sobre a área de programação pois ainda não sei nada, estou cursando 3D do Blender pela Udemy que é outra área que eu gosto demais, pois gosto muito de arte. Tenho conhecimento básico de Photoshop, informática estou disposto a ajudar naquilo em que precisarem, podem contar comigo. 🚀
-      
-      #nlw #rocketseat
-    `,
-    publishedAt: new Date('2024-08-10 20:00:00')
-  },
-]
+import { ChangeEvent, FormEvent, InvalidEvent, useEffect, useState } from "react"
+import { createPost, getRecentPosts } from "../api/post"
+import { Button } from "../components/Button"
 
 export function Home() {
+  const [posts, setPosts] = useState<IPost[]>([])
+  const [newPostText, setNewPostText] = useState("")
+
+  async function handleCreateNewPost(event: FormEvent) {
+    event.preventDefault()
+    
+    await createPost({
+        content: newPostText,
+    })
+    await loadPosts()
+    setNewPostText("")
+  }   
+  
+  function handleNewPostChange(event: ChangeEvent<HTMLTextAreaElement>) {
+    event.target.setCustomValidity("")
+    setNewPostText(event.target.value)
+  }
+
+  function handleNewPostInvalid(event: InvalidEvent<HTMLTextAreaElement>) {
+    event.target.setCustomValidity("Esse campo é obrigatório")
+}
+
+  async function loadPosts() {
+    const rawPosts = await getRecentPosts()
+
+    if (rawPosts) {
+      const posts = rawPosts.map(post => ({
+        ...post,
+        publishedAt: new Date(post.publishedAt)
+      }))
+      setPosts(posts)
+    }
+  }
+
+  useEffect(() => {
+    loadPosts()
+  }, []) 
+
+  const isNewPostEmpty = newPostText.length === 0
+
   return (
     <div>
       <div className={styles.wrapper}>
         <Sidebar />
         <main>
+          <div>
+            <form onSubmit={handleCreateNewPost} className={styles.postForm}>
+              <strong>Deixe uma nova publicação</strong>
+
+              <textarea 
+                  name="comment"
+                  placeholder="Faça uma nova publicação"
+                  value={newPostText}
+                  onChange={handleNewPostChange}
+                  onInvalid={handleNewPostInvalid}
+                  required
+              />
+              <footer>
+                <Button type="submit" text="Publicar" disabled={isNewPostEmpty} />
+              </footer>
+            </form>          
+          </div>
           {posts.map(post => {
             return (
               <Post 

@@ -1,0 +1,29 @@
+.login {
+    background: var(--gray-800);
+    border-radius: 8px;
+    padding: 2.5rem;
+    overflow: hidden;
+
+    text-align: center;
+}
+
+.fields {
+    display: grid;
+    gap: 2rem;
+    width: 30rem;    
+    margin: 2.5rem auto;
+}
+
+.login > p {
+    margin-top: 2rem;
+}
+
+@media (max-width: 550px) {
+    .fields {
+        width: 100%
+    }
+
+    .steps > div {
+        width: 5rem;
+    }
+}

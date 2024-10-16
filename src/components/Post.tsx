@@ -6,15 +6,17 @@ import styles from "./Post.module.css"
 import { ChangeEvent, FormEvent, InvalidEvent, useState } from "react"
 import { IPost } from "../api/models/Post"
 import { formatToContent } from "../utils/string"
+import { Button } from "./Button"
+
+import fallbackPersonImage from "../assets/images/fallback-person.png"
+import { createComment, deleteComment } from "../api/comment"
 
 interface PostProps {
     post: IPost
 }
 
 export function Post({ post }: PostProps) {
-    const [comments, setComments] = useState([
-        'Muito bom Devon, parabéns!! 👏👏'
-    ])
+    const [comments, setComments] = useState(post.comments)
 
     const [newCommentText, setNewCommentText] = useState('')
     
@@ -32,7 +34,14 @@ export function Post({ post }: PostProps) {
     function handleCreateNewComment(event: FormEvent) {
         event.preventDefault()
         
-        setComments([...comments, newCommentText])
+        createComment({
+            content: newCommentText,
+            postId: post.id
+        }).then(comment => {
+            if (comment) {
+                setComments(state => ([comment, ...state]))
+            }
+        })
         setNewCommentText("")
     }   
 
@@ -45,9 +54,13 @@ export function Post({ post }: PostProps) {
         event.target.setCustomValidity("Esse campo é obrigatório")
     }
 
-    function deleteComment(commentToDelete: string) {
+    async function handleDeleteComment(commentId: string) {
         const commentsWithoutDeletedOne = comments.filter(comment => {
-            return comment !== commentToDelete
+            return comment.id !== commentId
+        })
+
+        await deleteComment({
+            commentId
         })
 
         setComments(commentsWithoutDeletedOne)
@@ -59,7 +72,7 @@ export function Post({ post }: PostProps) {
         <article className={styles.post}>
             <header>
                 <div className={styles.author}>
-                    <Avatar src={post.author.avatarUrl} />
+                    <Avatar linkTo={`/profile/${post.author.id}`} src={post.author.avatarUrl ?? fallbackPersonImage} />
                     <div className={styles.authorInfo}>
                         <strong>{post.author.name}</strong>
                         <span>{post.author.role}</span>
@@ -89,9 +102,7 @@ export function Post({ post }: PostProps) {
                 />
 
                 <footer>
-                    <button type="submit" disabled={isNewCommentEmpty}>
-                        Publicar
-                    </button>
+                    <Button type="submit" text="Publicar" disabled={isNewCommentEmpty} />
                 </footer>
             </form>
 
@@ -99,9 +110,9 @@ export function Post({ post }: PostProps) {
                 {comments.map(comment => {
                     return (
                         <Comment 
-                            key={comment} 
-                            content={comment} 
-                            onDeleteComment={deleteComment} 
+                            key={comment.id} 
+                            comment={comment}
+                            onDeleteComment={handleDeleteComment} 
                         />
                     )
                 })}

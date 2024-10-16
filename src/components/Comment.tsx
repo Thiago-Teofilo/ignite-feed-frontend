@@ -3,42 +3,78 @@ import styles from "./Comment.module.css"
 import { Avatar } from "./Avatar"
 import { useState } from "react"
 import { formatToContent } from "../utils/string";
+import { IComment } from "../api/models/Comment";
+
+import fallbackPersonImage from "../assets/images/fallback-person.png"
+import { getCurrentUser } from "../utils/user";
+import { likeComment, unlikeComment } from "../api/comment";
+import { format, formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface CommentProps {
-    content: string;
+    comment: IComment;
     onDeleteComment: (comment: string) => void;
 }
 
-export function Comment({ content, onDeleteComment }: CommentProps) {
-    const [likeCount, setLikeCount] = useState(0)
+export function Comment({ comment, onDeleteComment }: CommentProps) {
+    const [likeCount, setLikeCount] = useState(comment.likes ? comment.likes.length : 0)
+    const [wasLiked, setWasLiked] = useState(comment.likes ? !!comment.likes.find((like) => like.userId === getCurrentUser()!.id) : false)
 
     function handleDeleteComment() {
-        onDeleteComment(content)
+        onDeleteComment(comment.id)
     }
 
-    function handleLikeComment() {
-        setLikeCount((state) => {
-            return state + 1
-        })
+    async function handleLikeComment() {
+        if (!wasLiked) {
+            setLikeCount((state) => {
+                return state + 1
+            })
+            await likeComment({
+                commentId: comment.id,
+            })
+        } else {
+            setLikeCount((state) => {
+                return state - 1
+            })
+            await unlikeComment({
+                commentId: comment.id,
+            })
+        }
+        setWasLiked(!wasLiked)
     }
 
-    const formattedContent = formatToContent(content)
+    const publishedDate = new Date(comment.publishedAt)
 
+    const formattedContent = formatToContent(comment.content)
+
+    const publishedDateFormatted = format(publishedDate, "d 'de' LLLL 'ás' HH:mm'h'", {
+        locale: ptBR
+    })
+
+    const publishedDateRelativeToNow = formatDistanceToNow(publishedDate, {
+        locale: ptBR,
+        addSuffix: true
+    })
+
+    
     return (
         <div className={styles.comment}>
-            <Avatar hasBorder={false} src="https://media.licdn.com/dms/image/v2/D4D03AQHloTv6jOq3gA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1722442298115?e=1731542400&v=beta&t=y8qngHvMTI2LmQgVG8-eeYqJXhJiMxpAOb_d3qyTPHM" />
+            <Avatar linkTo={`/profile/${comment.author.id}`} hasBorder={false} src={comment.author.avatarUrl ?? fallbackPersonImage} />
         
             <div className={styles.commentBox}>
                 <div className={styles.commentContent}>
                     <header>
                         <div className={styles.authorAndTime}>
-                            <strong>Thiago Teofilo</strong>
-                            <time title="11 de Maio ás 08:13" dateTime="2022-05-11 08:13:30">Cerca de 1h atrás</time>
+                            <strong>{comment.author.name}</strong>
+                            <time title={publishedDateFormatted} dateTime={publishedDate.toISOString()}>{publishedDateRelativeToNow}</time>
                         </div>
-
-                        <button onClick={handleDeleteComment} title="Deletar comentário">
-                            <Trash size={24} />
-                        </button>
+                        {
+                            comment.author.id === getCurrentUser()!.id ? (
+                                <button onClick={handleDeleteComment} title="Deletar comentário">
+                                    <Trash size={24} />
+                                </button>
+                            ) : (<></>)
+                        }
                     </header>
 
                     <div 
@@ -47,10 +83,10 @@ export function Comment({ content, onDeleteComment }: CommentProps) {
                     />
             </div>
 
-                <footer>
+                <footer className={wasLiked ? styles.liked : ""}>
                     <button onClick={handleLikeComment}>
                         <ThumbsUp />
-                        Aplaudir <span>{likeCount}</span>
+                        Curtir <span>{likeCount}</span>
                     </button>
                 </footer>
             </div>

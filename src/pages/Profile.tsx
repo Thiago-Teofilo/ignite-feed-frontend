@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom"
 import { getProfile } from "../api/user"
 import { useEffect, useState } from "react"
 import { IUser } from "../api/models/user"
-// import { getCurrentUser } from "../utils/user"
 import { IPost } from "../api/models/Post"
 import { Post } from "../components/Post"
 
@@ -15,8 +14,6 @@ export function Profile() {
     const { id: userId } = useParams<{ id: string }>()
     const [user, setUser] = useState<IUser | null>(null)
     const [posts, setPosts] = useState<IPost[]>([])
-
-    // const isCurrentUserProfile = getCurrentUser()?.id === userId
 
     useEffect(() => {
         async function loadProfile() {

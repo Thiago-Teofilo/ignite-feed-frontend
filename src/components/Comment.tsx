@@ -6,10 +6,10 @@ import { formatToContent } from "../utils/string";
 import { IComment } from "../api/models/Comment";
 
 import fallbackPersonImage from "../assets/images/fallback-person.png"
-import { getCurrentUser } from "../utils/user";
 import { likeComment, unlikeComment } from "../api/comment";
 import { format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useAuth } from "../composables/use-auth.tsx";
 
 interface CommentProps {
     comment: IComment;
@@ -17,8 +17,11 @@ interface CommentProps {
 }
 
 export function Comment({ comment, onDeleteComment }: CommentProps) {
+    const auth = useAuth()
+
     const [likeCount, setLikeCount] = useState(comment.likes ? comment.likes.length : 0)
-    const [wasLiked, setWasLiked] = useState(comment.likes ? !!comment.likes.find((like) => like.userId === getCurrentUser()!.id) : false)
+    const [wasLiked, setWasLiked] = useState(comment.likes ? !!comment.likes.find((like) => like.userId === auth.user?.id) : false)
+
 
     function handleDeleteComment() {
         onDeleteComment(comment.id)
@@ -69,7 +72,7 @@ export function Comment({ comment, onDeleteComment }: CommentProps) {
                             <time title={publishedDateFormatted} dateTime={publishedDate.toISOString()}>{publishedDateRelativeToNow}</time>
                         </div>
                         {
-                            comment.author.id === getCurrentUser()!.id ? (
+                            comment.author.id === auth.user?.id ? (
                                 <button onClick={handleDeleteComment} title="Deletar comentário">
                                     <Trash size={24} />
                                 </button>

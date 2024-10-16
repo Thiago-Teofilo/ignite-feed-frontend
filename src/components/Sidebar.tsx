@@ -1,33 +1,38 @@
 import { PencilLine } from 'phosphor-react'
 import styles from './Sidebar.module.css'
 import { Avatar } from './Avatar'
-import { IUser } from '../api/models/user'
-
-import { getCurrentUser } from '../utils/user'
 
 import fallbackPersonImage from "../assets/images/fallback-person.png"
 import fallbackLandscapeImage from "../assets/images/landscape-fallback.png"
-
-const user: IUser = getCurrentUser()!;
+import { useAuth } from '../composables/use-auth'
 
 export function Sidebar() {
-    return (
-        <aside className={styles.sidebar}>
-            <img className={styles.cover} src={user.bannerUrl ?? fallbackLandscapeImage} />
-            
-            <div className={styles.profile}>
-                <Avatar linkTo={`/profile/${user.id}`} src={user.avatarUrl ?? fallbackPersonImage} /> 
+    const { user } = useAuth()
 
-                <strong>{user.name}</strong>
-                <span>{user.role}</span>
-            </div>
-
-            <footer>
-                <a href="#">
-                    <PencilLine size={20} />
-                    Editar seu perfil
-                </a>
-            </footer>
-        </aside>
-    )
+    if (user) {
+        return (
+            <aside className={styles.sidebar}>
+                <img className={styles.cover} src={user.bannerUrl ?? fallbackLandscapeImage} />
+                
+                <div className={styles.profile}>
+                    <Avatar linkTo={`/profile/${user.id}`} src={user.avatarUrl ?? fallbackPersonImage} /> 
+    
+                    <strong>{user.name}</strong>
+                    <span>{user.role}</span>
+                </div>
+    
+                <footer>
+                    <a href="#">
+                        <PencilLine size={20} />
+                        Editar seu perfil
+                    </a>
+                </footer>
+            </aside>
+        )
+    } else {
+        // TODO fazer com que seja possível carregar esta página sem estar logado
+        return (
+            <>Faça login</>
+        )
+    }
 }

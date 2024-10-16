@@ -6,6 +6,7 @@ import styles from './Register.module.css'
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { registerUser } from "../../api/auth";
+import { useAuth } from "../../composables/use-auth.tsx";
 
 interface IRegisterValues {
     email?: string | null;
@@ -16,6 +17,8 @@ interface IRegisterValues {
 }
 
 export function Register() {
+    const { setUser, setToken } = useAuth();
+
     const [isInStepTwo, setIsInStepTwo] = useState(false)
 
     const [registerValues, setRegisterValues] = useState<IRegisterValues>({
@@ -54,7 +57,8 @@ export function Register() {
             if (registerResponse) {
                 localStorage.setItem("token", registerResponse.token)
                 localStorage.setItem("user", JSON.stringify(registerResponse.user))
-                window.location.reload()
+                setToken(registerResponse.token);
+                setUser(registerResponse.user);
             }
         }
     }

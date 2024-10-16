@@ -5,12 +5,15 @@ import styles from "./Login.module.css"
 import { ChangeEvent, FormEvent, useState } from "react"
 import { toast } from "react-toastify"
 import { login } from "../../api/auth"
+import { useAuth } from "../../composables/use-auth.tsx"
 
 export function Login() {
     const [loginValues, setLoginValues] = useState({
         email: "",
         password: "",
     })
+
+    const { setUser, setToken } = useAuth();
 
     async function handleSubmit(event: FormEvent) {
         event.preventDefault()
@@ -27,7 +30,8 @@ export function Login() {
                 localStorage.setItem("token", loginResponse.token)
                 localStorage.setItem("user", JSON.stringify(loginResponse.user))
                 
-                window.location.reload()
+                setToken(loginResponse.token);
+                setUser(loginResponse.user);
             }
         }
     }

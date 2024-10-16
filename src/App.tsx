@@ -3,9 +3,11 @@ import './global.css'
 import { Router } from './Router'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import { AuthProvider } from './providers/auth';
 
 export function App() {
   return (
+    <AuthProvider>
     <div>
       <BrowserRouter>
         <Router />
@@ -20,8 +22,9 @@ export function App() {
           draggable
           pauseOnHover
           theme="dark"
-        />
+          />
       </BrowserRouter>
     </div>
+    </AuthProvider>
   )
 }

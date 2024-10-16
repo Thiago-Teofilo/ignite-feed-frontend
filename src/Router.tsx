@@ -4,19 +4,20 @@ import { Home } from "./pages/Home";
 import { Register } from "./pages/auth/Register";
 import { Navigate, Outlet } from 'react-router-dom';
 import { Login } from "./pages/auth/Login";
-import { getCurrentUser } from "./utils/user";
 import { Profile } from "./pages/Profile";
+import { useAuth } from "./composables/use-auth.tsx";
+
 
 export function PrivateRoute() {
-  const token = localStorage.getItem('token');
+  const {user,  token } = useAuth()
 
-  return token && getCurrentUser() ? <Outlet /> : <Navigate to="/login" />;
+  return token && user ? <Outlet /> : <Navigate to="/login" />;
 }
 
 export function AuthRoute() {
-    const token = localStorage.getItem('token');
+    const {user,  token } = useAuth()
   
-    return token && getCurrentUser() ? <Navigate to="/" /> : <Outlet />;
+    return token && user ? <Navigate to="/" /> : <Outlet />;
   }
 
 export function Router() {

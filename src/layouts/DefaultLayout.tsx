@@ -11,5 +11,5 @@ export function DefaultLayout() {
         <Outlet />
       </div>
     </div>
-  )
+  );
 }

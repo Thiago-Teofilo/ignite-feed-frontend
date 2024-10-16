@@ -93,7 +93,11 @@
     border-radius: 2px;
 }
 
-.commentBox footer button:hover {
+.commentBox footer button:focus {
+    box-shadow: none
+}
+
+.commentBox footer button:hover, .commentBox footer.liked button {
     color: var(--green-300);
 }
 

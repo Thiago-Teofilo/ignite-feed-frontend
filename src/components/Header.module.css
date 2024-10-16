@@ -9,3 +9,7 @@
 .header img {
     height: 2rem;
 }
+
+.header a:focus {
+    box-shadow: none
+}

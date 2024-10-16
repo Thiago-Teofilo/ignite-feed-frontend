@@ -1,0 +1,33 @@
+.button {
+    padding: 1rem 1.5rem;
+    margin-top: 1rem;
+    border-radius: 8px;
+    border: 0;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.button.primary {
+    background: var(--green-500);
+    color: var(--white);
+}
+
+.button.primary:not(:disabled):hover {
+    background: var(--green-300);
+}
+
+
+.button.secondary {
+    background: var(--gray-500);
+    color: var(--white);
+}
+
+.button.secondary:not(:disabled):hover {
+    background: var(--gray-600);
+}
+
+.button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}

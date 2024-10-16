@@ -1,0 +1,55 @@
+.me {
+    display: grid;
+    gap: 2rem;
+}
+
+.user-data {
+    background: var(--gray-800);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.user-data > div {
+    padding: 2.5rem;
+    padding-top: 0;
+}
+
+.cover {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+}
+
+.profile-avatar {
+    position: relative;
+    height: 0;
+    top: -100px;
+}
+
+.profile-avatar img {
+    width: 120px;
+    height: 120px;
+}
+
+.user-data h1 {
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 1122px) {
+    .cover {
+        height: 20vw;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .profile-avatar {
+        top: -60px;
+        height: 50px;
+    }
+
+    .profile-avatar img {
+        width: 90px;
+        height: 90px; 
+    }
+}

@@ -3,7 +3,7 @@ import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 
 import styles from './Register.module.css'
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { registerUser } from "../../api/auth";
 
@@ -17,8 +17,6 @@ interface IRegisterValues {
 
 export function Register() {
     const [isInStepTwo, setIsInStepTwo] = useState(false)
-
-    const navigate = useNavigate();
 
     const [registerValues, setRegisterValues] = useState<IRegisterValues>({
         email: null,

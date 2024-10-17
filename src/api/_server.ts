@@ -6,12 +6,17 @@ export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 export async function post<T, R>(path: string, body: T): Promise<R | void> {
     try {
         const token = localStorage.getItem("token")
-        const response = await axios.post<R>(`${backendUrl}/${path}`, body, {
+        const response = axios.post<R>(`${backendUrl}/${path}`, body, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        });
-        return response.data;
+        })
+
+        await toast.promise(response, {
+            pending: "Enviando dados",
+            success: "Enviado",
+        })
+        return (await response).data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
             if (error.response) {

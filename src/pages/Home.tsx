@@ -7,6 +7,7 @@ import { IPost } from "../api/models/Post"
 import { ChangeEvent, FormEvent, InvalidEvent, useEffect, useState } from "react"
 import { createPost, getRecentPosts } from "../api/post"
 import { Button } from "../components/Button"
+import { PostSkeleton } from "../components/skeleton/PostSkeleton"
 
 export function Home() {
   const [posts, setPosts] = useState<IPost[]>([])
@@ -71,14 +72,18 @@ export function Home() {
               </footer>
             </form>          
           </div>
-          {posts.map(post => {
-            return (
+          {posts.length > 0 ? (
+            posts.map((post) => (
               <Post 
                 key={post.id}
                 post={post}
               />
-            )
-          })}
+            ))
+          ) : (
+            [1, 2, 3, 4].map((index) => (
+              <PostSkeleton key={index} />
+            ))
+          )}
         </main>
       </div>
     </div>

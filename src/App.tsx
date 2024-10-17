@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router-dom'
 import './global.css'
 import { Router } from './Router'
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-loading-skeleton/dist/skeleton.css'
 import { ToastContainer } from 'react-toastify';
 import { AuthProvider } from './providers/auth';
 

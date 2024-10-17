@@ -9,6 +9,9 @@ import { useEffect, useState } from "react"
 import { IUser } from "../api/models/user"
 import { IPost } from "../api/models/Post"
 import { Post } from "../components/Post"
+import { PostSkeleton } from "../components/skeleton/PostSkeleton"
+import { BaseSkeleton } from "../components/skeleton/BaseSkeleton"
+import { AvatarSkeleton } from "../components/skeleton/AvatarSkeleton"
 
 export function Profile() {
     const { id: userId } = useParams<{ id: string }>()
@@ -36,25 +39,41 @@ export function Profile() {
 
     return (
         <div className={styles.me}>
-            <div className={styles['user-data']}>
-                <img className={styles.cover} src={user?.bannerUrl ?? fallbackLandscapeImage} />
-                <div className={styles["profile-avatar"]}>
-                    <Avatar src={user?.avatarUrl ?? fallbackPersonImage} />
+            {user ? (
+                <div className={styles.userData}>
+                    <img className={styles.cover} src={user?.bannerUrl ?? fallbackLandscapeImage} />
+                    <div className={styles.profileAvatar}>
+                        <Avatar src={user?.avatarUrl ?? fallbackPersonImage} />
+                    </div>
+                    <div>
+                        <h1>{user?.name}</h1>
+                        <p>{user?.role}</p>
+                    </div>
                 </div>
-                <div>
-                    <h1>{user?.name}</h1>
-                    <p>{user?.role}</p>
+            ) : (
+                <div className={`${styles.userData} ${styles.skeleton}`}>
+                    <div className={styles.cover}></div>
+                    <div className={styles.profileAvatar}>
+                        <AvatarSkeleton />
+                    </div>
+                    <div>
+                        <BaseSkeleton className={styles.title} /> 
+                        <BaseSkeleton />                             
+                    </div>
                 </div>
-            </div>
+            )
+
+            }
             <div>
-            {posts.map(post => {
-                return (
-                <Post
-                    key={post.id}
-                    post={post}
-                />
-                )
-            })}
+            {user ? posts.map(post => (
+                    <Post
+                        key={post.id}
+                        post={post}
+                    />
+            )) : [1, 2, 3].map(index => (
+                <PostSkeleton key={index} />
+            ))
+            } 
             </div>
         </div>
     )

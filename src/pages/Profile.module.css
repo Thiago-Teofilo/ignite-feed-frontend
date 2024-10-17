@@ -3,13 +3,13 @@
     gap: 2rem;
 }
 
-.user-data {
+.userData {
     background: var(--gray-800);
     border-radius: 8px;
     overflow: hidden;
 }
 
-.user-data > div {
+.userData > div {
     padding: 2.5rem;
     padding-top: 0;
 }
@@ -20,19 +20,24 @@
     object-fit: cover;
 }
 
-.profile-avatar {
+.profileAvatar {
     position: relative;
     height: 0;
     top: -100px;
 }
 
-.profile-avatar img {
+.profileAvatar img, .profileAvatar div {
     width: 120px;
     height: 120px;
 }
 
-.user-data h1 {
+.userData h1, .skeleton .title {
     margin-bottom: 0.5rem;
+}
+
+.skeleton .title {
+    font-size: 2rem;
+    margin: 1rem 0;
 }
 
 @media (max-width: 1122px) {
@@ -43,12 +48,12 @@
 
 
 @media (max-width: 768px) {
-    .profile-avatar {
+    .profileAvatar {
         top: -60px;
         height: 50px;
     }
 
-    .profile-avatar img {
+    .profileAvatar img, .profileAvatar div {
         width: 90px;
         height: 90px; 
     }

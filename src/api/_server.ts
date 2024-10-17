@@ -3,7 +3,17 @@ import { toast } from "react-toastify";
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-export async function post<T, R>(path: string, body: T): Promise<R | void> {
+interface IPostParams<T> {
+    path: string;
+    body: T;
+    showToast?: boolean
+}
+
+export async function post<T, R>({
+    path,
+    body,
+    showToast=true
+} : IPostParams<T>): Promise<R | void> {
     try {
         const token = localStorage.getItem("token")
         const response = axios.post<R>(`${backendUrl}/${path}`, body, {
@@ -12,10 +22,12 @@ export async function post<T, R>(path: string, body: T): Promise<R | void> {
             }
         })
 
-        await toast.promise(response, {
-            pending: "Enviando dados",
-            success: "Enviado",
-        })
+        if (showToast) {
+            await toast.promise(response, {
+                pending: "Enviando dados",
+                success: "Enviado",
+            })
+        }
         return (await response).data;
     } catch (error) {
         if (axios.isAxiosError(error)) {

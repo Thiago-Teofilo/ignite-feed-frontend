@@ -18,5 +18,8 @@ export async function getRecentPosts(page: number = 1): Promise<IPost[] | void> 
 }
 
 export async function createPost(body: ICreatePostRequest) {
-    return await post<ICreatePostRequest, void>("post", body)
+    return await post<ICreatePostRequest, void>({
+        path: "post",
+        body
+    })
 }

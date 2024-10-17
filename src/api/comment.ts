@@ -16,11 +16,17 @@ interface IDeleteComment {
 
 
 export async function createComment(body: IPostCommentRequest) {
-    return await post<IPostCommentRequest, IComment>("comment", body)
+    return await post<IPostCommentRequest, IComment>({
+        path: "comment",
+        body
+    })
 }
 
 export async function likeComment(body: ILikeComment) {
-    return await post<ILikeComment, void>("comment/like", body)
+    return await post<ILikeComment, void>({
+        path: "comment/like",
+        body
+    })
 }
 
 export async function unlikeComment(body: ILikeComment) {

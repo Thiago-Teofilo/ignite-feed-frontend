@@ -19,10 +19,24 @@ export interface IAuthLoginRequest {
 }
 
 
+export async function getSession() {
+    return await post<undefined, IAuthRegisterAndLoginResponse>({
+        path: "auth/session",
+        body: undefined,
+        showToast: false
+    })
+}
+
 export async function registerUser(body: IAuthRegisterRequest) {
-    return await post<IAuthRegisterRequest, IAuthRegisterAndLoginResponse>(`auth/register`, body)
+    return await post<IAuthRegisterRequest, IAuthRegisterAndLoginResponse>({
+        path: "auth/register",
+        body,
+    })
 }
 
 export async function login(body: IAuthLoginRequest) {
-    return await post<IAuthLoginRequest, IAuthRegisterAndLoginResponse>("auth", body)
+    return await post<IAuthLoginRequest, IAuthRegisterAndLoginResponse>({
+        path: "auth",
+        body
+    })
 }

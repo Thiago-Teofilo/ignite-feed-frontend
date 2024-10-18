@@ -4,7 +4,7 @@ import { Header } from '../components/Header'
 import styles from './DefaultLayout.module.css'
 import { useAuth } from '../composables/use-auth';
 import { MoonLoader } from 'react-spinners';
-import { CSSProperties, useEffect } from 'react';
+import { CSSProperties } from 'react';
 // import { toast } from 'react-toastify';
 
 const override: CSSProperties = {

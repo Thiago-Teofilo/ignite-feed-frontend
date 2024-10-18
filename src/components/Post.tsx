@@ -10,6 +10,8 @@ import { Button } from "./Button"
 
 import fallbackPersonImage from "../assets/images/fallback-person.png"
 import { createComment, deleteComment } from "../api/comment"
+import { useAuth } from "../composables/use-auth"
+import { toast } from "react-toastify"
 
 interface PostProps {
     post: IPost
@@ -17,6 +19,8 @@ interface PostProps {
 
 export function Post({ post }: PostProps) {
     const [comments, setComments] = useState(post.comments)
+
+    const auth = useAuth()
 
     const [newCommentText, setNewCommentText] = useState('')
     
@@ -34,15 +38,19 @@ export function Post({ post }: PostProps) {
     function handleCreateNewComment(event: FormEvent) {
         event.preventDefault()
         
-        createComment({
-            content: newCommentText,
-            postId: post.id
-        }).then(comment => {
-            if (comment) {
-                setComments(state => ([comment, ...state]))
-            }
-        })
-        setNewCommentText("")
+        if (auth.user) {
+            createComment({
+                content: newCommentText,
+                postId: post.id
+            }).then(comment => {
+                if (comment) {
+                    setComments(state => ([comment, ...state]))
+                }
+            })
+            setNewCommentText("")
+        } else {
+            toast.warn("Você precisa realizar o login")
+        }
     }   
 
     function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>) {

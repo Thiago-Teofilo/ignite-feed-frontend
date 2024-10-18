@@ -3,7 +3,7 @@ import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 
 import styles from './Register.module.css'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { registerUser } from "../../api/auth";
 import { useAuth } from "../../composables/use-auth.tsx";
@@ -20,6 +20,8 @@ export function Register() {
     const { setUser, setToken } = useAuth();
 
     const [isInStepTwo, setIsInStepTwo] = useState(false)
+
+    const navigate = useNavigate()
 
     const [registerValues, setRegisterValues] = useState<IRegisterValues>({
         email: null,
@@ -58,6 +60,7 @@ export function Register() {
                 localStorage.setItem("token", registerResponse.token)
                 setToken(registerResponse.token);
                 setUser(registerResponse.user);
+                navigate("/")
             }
         }
     }

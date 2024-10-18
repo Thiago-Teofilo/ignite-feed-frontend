@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Button } from "../../components/Button"
 import { Input } from "../../components/Input"
 import styles from "./Login.module.css"
@@ -14,6 +14,8 @@ export function Login() {
     })
 
     const { setUser, setToken } = useAuth();
+
+    const navigate = useNavigate()
 
     async function handleSubmit(event: FormEvent) {
         event.preventDefault()
@@ -31,6 +33,7 @@ export function Login() {
                 
                 setToken(loginResponse.token);
                 setUser(loginResponse.user);
+                navigate("/")
             }
         }
     }

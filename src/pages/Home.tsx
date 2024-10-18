@@ -8,19 +8,26 @@ import { ChangeEvent, FormEvent, InvalidEvent, useEffect, useState } from "react
 import { createPost, getRecentPosts } from "../api/post"
 import { Button } from "../components/Button"
 import { PostSkeleton } from "../components/skeleton/PostSkeleton"
+import { useAuth } from "../composables/use-auth"
+import { toast } from "react-toastify"
 
 export function Home() {
   const [posts, setPosts] = useState<IPost[]>([])
   const [newPostText, setNewPostText] = useState("")
+  const auth = useAuth()
 
   async function handleCreateNewPost(event: FormEvent) {
     event.preventDefault()
     
-    await createPost({
-        content: newPostText,
-    })
-    await loadPosts()
-    setNewPostText("")
+    if (auth.user) {
+      await createPost({
+          content: newPostText,
+      })
+      await loadPosts()
+      setNewPostText("")
+    } else {
+      toast.warn("Você precisa realizar o login")
+    }
   }   
   
   function handleNewPostChange(event: ChangeEvent<HTMLTextAreaElement>) {

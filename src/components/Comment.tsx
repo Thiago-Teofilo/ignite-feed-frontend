@@ -10,6 +10,7 @@ import { likeComment, unlikeComment } from "../api/comment";
 import { format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useAuth } from "../composables/use-auth.tsx";
+import { toast } from "react-toastify";
 
 interface CommentProps {
     comment: IComment;
@@ -28,22 +29,26 @@ export function Comment({ comment, onDeleteComment }: CommentProps) {
     }
 
     async function handleLikeComment() {
-        if (!wasLiked) {
-            setLikeCount((state) => {
-                return state + 1
-            })
-            await likeComment({
-                commentId: comment.id,
-            })
+        if (auth.user) {
+            if (!wasLiked) {
+                setLikeCount((state) => {
+                    return state + 1
+                })
+                await likeComment({
+                    commentId: comment.id,
+                })
+            } else {
+                setLikeCount((state) => {
+                    return state - 1
+                })
+                await unlikeComment({
+                    commentId: comment.id,
+                })
+            }
+            setWasLiked(!wasLiked)
         } else {
-            setLikeCount((state) => {
-                return state - 1
-            })
-            await unlikeComment({
-                commentId: comment.id,
-            })
+            toast.warn("Você precisa realizar o login")
         }
-        setWasLiked(!wasLiked)
     }
 
     const publishedDate = new Date(comment.publishedAt)

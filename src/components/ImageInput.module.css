@@ -1,0 +1,25 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.iconLabel {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  padding: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.iconLabel:hover {
+  background-color: #e0e0e0;
+}

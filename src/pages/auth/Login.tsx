@@ -28,7 +28,6 @@ export function Login() {
 
             if (loginResponse) {
                 localStorage.setItem("token", loginResponse.token)
-                localStorage.setItem("user", JSON.stringify(loginResponse.user))
                 
                 setToken(loginResponse.token);
                 setUser(loginResponse.user);

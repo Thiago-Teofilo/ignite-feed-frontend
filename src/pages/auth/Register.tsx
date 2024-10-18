@@ -56,7 +56,6 @@ export function Register() {
 
             if (registerResponse) {
                 localStorage.setItem("token", registerResponse.token)
-                localStorage.setItem("user", JSON.stringify(registerResponse.user))
                 setToken(registerResponse.token);
                 setUser(registerResponse.user);
             }

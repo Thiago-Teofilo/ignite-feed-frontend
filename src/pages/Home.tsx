@@ -8,13 +8,9 @@ import { ChangeEvent, FormEvent, InvalidEvent, useEffect, useState } from "react
 import { createPost, getRecentPosts } from "../api/post"
 import { Button } from "../components/Button"
 import { PostSkeleton } from "../components/skeleton/PostSkeleton"
-import { getSession } from "../api/auth"
-import { IUser } from "../api/models/user"
 
 export function Home() {
   const [posts, setPosts] = useState<IPost[]>([])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setUser] = useState<IUser | null>(null)
   const [newPostText, setNewPostText] = useState("")
 
   async function handleCreateNewPost(event: FormEvent) {
@@ -50,16 +46,6 @@ export function Home() {
 
   useEffect(() => {
     loadPosts()
-
-    async function reloadUser() {
-      const session = await getSession()
-
-      if (session) {
-        setUser(session.user)
-      }
-    }
-
-    reloadUser()
   }, []) 
 
   const isNewPostEmpty = newPostText.length === 0

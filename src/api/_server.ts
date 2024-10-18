@@ -83,3 +83,37 @@ export async function del<T, R>(path: string, body: T): Promise<R | void> {
         }
     }
 }
+
+
+export async function patch<T, R>({
+    path,
+    body,
+    showToast=true
+} : IPostParams<T>): Promise<R | void> {
+    try {
+        const token = localStorage.getItem("token")
+        const response = axios.patch<R>(`${backendUrl}/${path}`, body, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+        if (showToast) {
+            await toast.promise(response, {
+                pending: "Atualizando",
+                success: "Atualizado",
+            })
+        }
+        return (await response).data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            if (error.response) {
+                toast.error(error.response.data.message || "Erro desconhecido");
+            } else {
+                toast.error("Erro de conexão");
+            }
+        } else {
+            toast.error("Erro inesperado");
+        }
+    }
+}

@@ -5,6 +5,7 @@ import { Avatar } from './Avatar'
 import fallbackPersonImage from "../assets/images/fallback-person.png"
 import fallbackLandscapeImage from "../assets/images/landscape-fallback.png"
 import { useAuth } from '../composables/use-auth'
+import { NavLink } from 'react-router-dom'
 
 export function Sidebar() {
     const { user } = useAuth()
@@ -22,10 +23,10 @@ export function Sidebar() {
                 </div>
     
                 <footer>
-                    <a href="#">
+                    <NavLink to={`profile/${user.id}`}>
                         <PencilLine size={20} />
                         Editar seu perfil
-                    </a>
+                    </NavLink>
                 </footer>
             </aside>
         )

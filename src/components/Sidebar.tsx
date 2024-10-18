@@ -33,7 +33,17 @@ export function Sidebar() {
     } else {
         // TODO fazer com que seja possível carregar esta página sem estar logado
         return (
-            <>Faça login</>
+            <aside className={styles.sidebar}>
+                <div className={styles.welcome}>
+                    <strong>Bem vindo(a)</strong>
+                    <span>Possui conta?</span>
+                </div>
+                <footer>
+                    <NavLink to="/login">
+                        Fazer login
+                    </NavLink>
+                </footer>
+            </aside>
         )
     }
 }
